@@ -18,10 +18,21 @@ func Run() {
 			Usage:    "网卡名",
 			Required: true,
 		},
+		&cli.BoolFlag{
+			Name:     "afpkt",
+			Usage:    "模式",
+			Required: false,
+		},
 	}
 	App.Action = func(c *cli.Context) error {
 		eth := c.String("i")
-		if eth != "" {
+		afpkt := c.Bool("afpkt")
+		if eth == "" {
+			os.Exit(1)
+		}
+		if afpkt {
+			collect.RunAF(eth)
+		} else {
 			collect.Collect(eth)
 		}
 		return nil
